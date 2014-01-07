@@ -67,7 +67,9 @@ void loop() {
     {
       Serial.print("i=");Serial.print(radio.GetSender());Serial.print(";");
       for (byte i = 0; i < *radio.DataLen; i++) //can also use radio.GetDataLen() if you don't like pointers
+      if (radio.Data[i] > 32) {
         Serial.print((char)radio.Data[i]);
+       } 
       if (radio.ACKRequested())
       {
         radio.SendACK();
