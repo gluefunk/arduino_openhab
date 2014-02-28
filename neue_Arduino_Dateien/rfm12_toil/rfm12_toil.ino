@@ -16,12 +16,16 @@
 #define INPPORT       8   // 0 =kein //8 =DIO 8
 #define DS18B20_PORT1  9 // defined if DS18B20 is connected to a port
 #define DS18B20_PORT2  9 // defined if DS18B20 is connected to a port
-#define SHT11_PORT    0   // 5 defined if SHT11 is connected to a port
-#define LUX_PORT      6   // defined if LDR is connected to a port's AIO pin
+#define SHT11_PORT    0 // 5 defined if SHT11 is connected to a port
+#define DHT_PORT      5 // 5 defined if DHT11 is connected to a port
+#define LUX_PORT      1   // 1/0  BH1750 LUX Modul A4->SCL , A5->SDA 
 #define PIR_PORT      0   // defined if PIR is connected to a port's DIO pin
 #define ONE_WIRE_BUS 9 // any OneWire devices  port 4 
 OneWire oneWire(ONE_WIRE_BUS); // Setup a oneWire
 DallasTemperature sensors(&oneWire);// Pass oneWire reference to Dallas Temp
+#if DHT_PORT
+DHTxx dht (5);
+#endif
 #if SHT11_PORT
     SHT11 sht11 (SHT11_PORT);
     static void shtDelay () {
@@ -57,9 +61,17 @@ void loop() {
    aa += ";t="; aa += temp; 
    #endif          ///////////  
    #if DS18B20_PORT2 //////////
+   //sensors.requestTemperatures();
    temp =  sensors.getTempCByIndex(1);
    aa += ";u="; aa += temp; 
-   #endif          /////////// 
+   #endif          ///////////
+   #if DHT_PORT
+   int t, h;
+   if (dht.reading(t, h)){  
+   aa += ";h="; aa += h/10;
+   aa += ";T="; aa += t/10;
+   } 
+   #endif          ////////////
    #if SHT11_PORT
         sht11.measure(SHT11::HUMI, shtDelay);        
         sht11.measure(SHT11::TEMP, shtDelay);
@@ -68,8 +80,8 @@ void loop() {
         int humi = h + 0.5, temp = 10 * t + 0.5;
    aa += ";h="; aa += humi;
    aa += ";T="; aa += humi;
-   #endif   
-   #if INPPORT 
+   #endif         /////////////
+   #if INPPORT   //////////////
      if (digitalRead(INPPORT)) aa+=";s=1";
      else aa += ";s=0"; 
    #endif      
@@ -96,7 +108,8 @@ void loop() {
     rf12_sendWait(2);  rf12_sleep(RF12_SLEEP);  
     Sleepy::loseSomeTime(6000);
     rf12_sleep(RF12_WAKEUP);
- } 
+ }
+ 
 //--------------------------------------------------
 int BH1750_Read(int address) { 
   int i=0;

@@ -134,8 +134,8 @@ rule "Set random room temperatures"
 		System started or
 		Time cron "0 0/5 * * * ?"
 	then
-		Temperature?.members.forEach(temperature|
-			postUpdate(temperature, 20.0 + (25.0 - (Math::random * 50.0).intValue) / 10.0)
+		//Temperature?.members.forEach(temperature|
+			//postUpdate(temperature, 20.0 + (25.0 - (Math::random * 50.0).intValue) / 10.0)
 		)
 end
 
@@ -258,13 +258,13 @@ rule "Arduino on update"
 	when 
 		Item Arduino received update
 	then
-	    ArduinoUpdate =  Arduino.state.toString.trim
+	    ArduinoUpdate =  Arduino.state.toString.trim +";E"
 	    var String[] buffer
 		var String dat
 		var String typ 
 		var Number i = 0
-		//var String JLs="i=8;b=0;t=17.4;h=70;s=1"		
-		buffer = ArduinoUpdate.split(";")		
+		//var String Test="i=8;b=0;t=17.4;h=70;s=1"		
+		buffer = ArduinoUpdate.split(";")
 		var String id = buffer.get(0).mid(2,4)
 		println (id )
 		i=1
@@ -273,14 +273,16 @@ rule "Arduino on update"
 			 if (id=="7") { switch(typ) {		 
 				case "t" : postUpdate(Temperature_OG_Buero,dat)
 				case "u" : postUpdate(Temperature2_OG_Buero,dat)
-				case "b" : postUpdate(Fenster_OG_Buero,dat)
+				case "s" : postUpdate(Fenster_OG_Buero,dat)
+				case "h" : postUpdate(Feuchte_OG_Buero,dat)
+				case "T" : postUpdate(TemperatureDHT_OG_Buero,dat)
 			 }}		  
 			 if (id=="8") { switch(typ) {		 
 				case "t" : postUpdate(Temperature_OG_Buero,dat)
 				case "b" : postUpdate(Fenster_OG_Buero,dat)
 			 }}		   
 		 i = (i + 1).intValue }			 	
-		while ( i < 5 ) 
+		while ( buffer.get(i).left(1)!="E" ) 
 		ArduinoUpdate = ""			
 end
 

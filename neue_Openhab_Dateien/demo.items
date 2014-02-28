@@ -77,9 +77,11 @@ Number Temperature_UG_Kinderzimmer 	"Temperature [%.1f °C]"	<temperature> (Temp
 Number Temperature_UG_Schlafzimmer 	"Temperature [%.1f °C]"	<temperature> (Temperature, UG_Schlafzimmer)	 
 Number Temperature_OG_Buero 	"Temperature [%.1f °C]"	<temperature>	(Temperature, OG_Buero)
 Number Temperature2_OG_Buero 	"Temperature2 [%.1f °C]"	<temperature>	(Temperature, OG_Buero)
-Number Fenster_OG_Buero 	"F_Kontakt [%.1f Status]"	<temperature>	(OG_Buero, Windows)
-//Number Fenster_UG_Toilette	"F_Kontakt Toil [%.1f Status]"	<temperature>	(UG_Toilette, Windows) 
-//Number Feuchte_UG_Toilette	"Feuchte Toil [%.1f Status]"	<temperature>	(UG_Toilette, Temperature) 
+Number TemperatureDHT_OG_Buero "TemperatureDHT [%.0f °C]"	<temperature>	(Temperature, OG_Buero)
+Number Fenster_OG_Buero 	"F_Kontakt [%.0f Status]"	<temperature>	(OG_Buero, Windows)
+Number Feuchte_OG_Buero 	"Feuchte [%.0f %%]"	<temperature>	(Temperature, OG_Buero)
+Number Fenster_UG_Toilette	"F_Kontakt Toil [%.1f Status]"	<temperature>	(UG_Toilette, Windows) 
+Number Feuchte_UG_Toilette	"Feuchte Toil [%.1f Status]"	<temperature>	(UG_Toilette, Temperature) 
 Number Temperature_OG_Gast 	"Temperature [%.1f °C]"	<temperature>	(Temperature, OG_Gast)
 /* Indoor Temperatures *///
 Number Temperature_GF_Corridor 	"Temperature [%.1f °C]"	<temperature>	(Temperature, GF_Corridor)
@@ -105,10 +107,9 @@ Contact Window_FF_Office_Window "Office Window [MAP(en.map):%s]"	(FF_Office, Win
 Contact Window_FF_Office_Door 	"Balcony Door [MAP(en.map):%s]"		(FF_Office, Windows)
 
 Contact Garage_Door 			"Garage Door [MAP(en.map):%s]"		(Outdoor, Windows)
-/* 
-String Serial (Climate) {serialstring="/dev/ttyUSB0"}
-Number TemperatureFamilyRoom "Гостиная [%.1f °C]"  <sofa> (Temperature,TemperatureInside, CheckExpired) {serialstring="/dev/ttyUSB0;REGEXP(id=(\\w+);type=(t|h);value=(\\-?\\d+\\.?\\d*)\\s*);406;t"}
-*/
+
+//String Serial (Climate) {serialstring="/dev/ttyUSB0"}
+
 Group Weather_Chart													(Weather)
 Number Weather_Temperature 		"Outside Temperature [%.1f °C]"	<temperature> (Weather_Chart) { http="<[http://weather.yahooapis.com/forecastrss?w=638242&u=c:60000:XSLT(yahoo_weather_temperature.xsl)]" }
 Number Weather_Temp_Max 		"Todays Maximum [%.1f °C]"	<temperature> (Weather_Chart)
@@ -131,11 +132,7 @@ Number Temperature_Setpoint		"Set Temperature [%.1f °C]" <temperature>
 
 String UnknownDevices    "Unknown Devices in Range: [%s]" { bluetooth="?" }
 Number NoOfPairedDevices "Paired Devices in Range: [%d]"  { bluetooth="!" }
-//String Serial (Climate) {serialstring="COM71"}
-//Number Zone1Temperature {serialstring="COM45;REGEXP(i=3;t=t;v=(\\-?\\d+\\.?\\d*)\\s*)"}
-//String Arduino5        "eval arduino"  { serialstring="COM14" } /
-//String Arduino2 "eval arduino" { serialstring="COM14" } 
-//String Arduino2              "eval arduino"      { serialstring="COM87" }
-///String Arduino             "eval arduino2"     { serial="COM72" } //alte Version ohne serialstring /nur:entweder oder 
-String Arduino             "eval arduino"     { serial="COM87" }
+String Arduino     "eval arduino"     { serial="COM87" }
+//String Arduino2   "eval arduino2"     { serial="COM14" } 
+//String Arduino3  "eval arduino3"      { serial="COM86" }
 //Switch Network_OpenhabWebsite   "openHAB Web"   (Status, Network)       { nh="openhab.org" }
